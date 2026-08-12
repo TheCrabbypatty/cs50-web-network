@@ -5,14 +5,29 @@
     <h1>All Posts</h1>
 </div>
 <div class="mx-5">  
-    <div class = "post"> 
+    <div class = "card">
         <h3>New Post</h3>
         <form>
-            <textarea></textarea>
+            {% csrf_token %} 
+            <textarea id = "content" autofocus></textarea>
+            <br>
             <button class = "btn btn-primary">Post</button>
         </form>
     </div>
 </div>
 
+{% for post in posts %}
+    <div class = "my-3"> 
+        <div class = "mx-5">
+            <div class = "card">
+                <div class = "post"> 
+                    <strong>{{ post.poster }}</strong>
+                    <p>{{ post.content }}</p>
+                    <small>{{ post.timestamp }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
 
 {% endblock %}
