@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import User, Post
@@ -11,9 +11,7 @@ def index(request):
     if request.method == "POST":
         content = request.POST["content"]
         Post.objects.create(poster=request.user, content=content)
-        return render(request, "network/index.html", {
-                "posts": posts
-            })
+        return redirect("index")
     posts = Post.objects.all().order_by("-timestamp")
     return render(request, "network/index.html", {
             "posts": posts

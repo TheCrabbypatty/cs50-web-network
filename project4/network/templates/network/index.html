@@ -7,11 +7,11 @@
 <div class="mx-5">  
     <div class = "card">
         <h3>New Post</h3>
-        <form>
+        <form action = "{% url 'index' %}" method="POST">
             {% csrf_token %} 
-            <textarea id = "content" autofocus></textarea>
+            <textarea id = "content" name = "content" autofocus></textarea>
             <br>
-            <button class = "btn btn-primary">Post</button>
+            <button class = "btn btn-primary" type = "submit">Post</button>
         </form>
     </div>
 </div>
@@ -21,7 +21,8 @@
         <div class = "mx-5">
             <div class = "card">
                 <div class = "post"> 
-                    <strong>{{ post.poster }}</strong>
+                    <h5>{{ post.poster }}</h5>
+                    <button class="small btn btn-primary" data-id="{{ post.id }}">Edit</button>
                     <p>{{ post.content }}</p>
                     <small>{{ post.timestamp }}</small>
                 </div>
