@@ -20,11 +20,15 @@
     <div class = "my-3"> 
         <div class = "mx-5">
             <div class = "card">
-                <div class = "post"> 
-                    <h5>{{ post.poster }}</h5>
-                    <button class="small btn btn-primary" data-id="{{ post.id }}">Edit</button>
-                    <p>{{ post.content }}</p>
-                    <small>{{ post.timestamp }}</small>
+                <div class = "post">
+                    <div id = "post-{{ post.id }}">
+                        <h5>{{ post.poster }}</h5>
+                        {% if user == post.poster %}
+                            <button class="edit-btn small btn btn-primary" data-id="{{ post.id }}">Edit</button>
+                        {% endif %}
+                        <p class = "content">{{ post.content }}</p>
+                        <small>{{ post.timestamp }}</small>
+                    </div>
                 </div>
             </div>
         </div>

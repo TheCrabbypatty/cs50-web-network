@@ -1,8 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.urls import reverse
+import json
+
 
 from .models import User, Post
 
@@ -16,6 +19,17 @@ def index(request):
     return render(request, "network/index.html", {
             "posts": posts
         })
+
+@csrf_exempt
+def edit(request, post_id):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        post = Post.objects.get(id=post_id)
+        if request.user != post.poster:
+            return JsonResponse({"error": "Not allowed"}, status=403)
+        post.content = data["content"]
+        post.save()
+        return JsonResponse({"content": post.content})
 
 
 def login_view(request):
