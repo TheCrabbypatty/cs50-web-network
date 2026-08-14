@@ -94,3 +94,9 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+def profile(request, username):
+    user = User.objects.get(username=username)
+    posts = Post.objects.filter(poster = user).order_by("-timestamp")
+
+    return render(request, "network/profile.html", {"profile_user": user, "posts": posts, "followers": user.followers.count(), "following": user.following.count()})
