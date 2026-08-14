@@ -27,6 +27,10 @@
                             <button class="edit-btn small btn btn-primary" data-id="{{ post.id }}">Edit</button>
                         {% endif %}
                         <p class = "content">{{ post.content }}</p>
+                        <button class="like-btn btn btn-outline-primary btn-sm" data-id="{{ post.id }}">
+                            Like ({{ post.likes.count }})
+                        </button>
+                        <br>
                         <small>{{ post.timestamp }}</small>
                     </div>
                 </div>

@@ -25,3 +25,22 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }});
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".like-btn").forEach(button => {
+        button.onclick = () => {
+            const id = button.dataset.id;
+
+            fetch(`/like/${id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                button.innerText = `Like (${data.likes})`;
+            });
+        };
+    });
+});

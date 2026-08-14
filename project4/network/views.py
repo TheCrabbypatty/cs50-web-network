@@ -31,6 +31,18 @@ def edit(request, post_id):
         post.save()
         return JsonResponse({"content": post.content})
 
+@csrf_exempt
+def like(request, post_id):
+    if request.method == "POST":
+        post = Post.objects.get(id=post_id)
+        user = request.user
+
+        if user in post.likes.all():
+            post.likes.remove(user)
+        else:
+            post.likes.add(user)
+
+        return JsonResponse({"likes": post.likes.count()})
 
 def login_view(request):
     if request.method == "POST":
