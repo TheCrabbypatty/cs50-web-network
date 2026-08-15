@@ -1,5 +1,32 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    {{ username }}
+    <div class = "mx-5">
+        <h1>{{ profile_user.username }}</h1>
+        <p>Followers: {{ Followers }}</p>
+        <p>Following: {{ Following }}</p>
+
+        {% if user !=  profile.user %}
+            {% if is_following %}
+                <button id="follow-btn" class="btn btn-danger">Unfollow</button>
+            {% else %}
+                <button id="follow-btn" class="btn btn-primary">Follow</button>
+            {% endif %}
+        {% endif %}
+    </div>
+    
+    <hr>
+
+    <div class="mx-5">
+        <h3>Posts</h3>
+        {% for post in posts %}
+            <div class="card my-3">
+                <div class="card-body">
+                    <p>{{ post.content }}</p>
+                    <small>{{ post.timestamp }}</small>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
 {% endblock %}

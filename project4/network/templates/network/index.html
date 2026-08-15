@@ -22,7 +22,7 @@
             <div class = "card">
                 <div class = "post">
                     <div id = "post-{{ post.id }}">
-                        <h5>{{ post.poster }}</h5>
+                        <h5><a href = "user/{{ post.poster }}">{{ post.poster }}</a></h5>
                         {% if user == post.poster %}
                             <button class="edit-btn small btn btn-primary" data-id="{{ post.id }}">Edit</button>
                         {% endif %}
