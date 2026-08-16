@@ -44,6 +44,26 @@ def like(request, post_id):
 
         return JsonResponse({"likes": post.likes.count()})
 
+@csrf_exempt
+def follow(request, username):
+    profile_user = User.objects.get(username=username)
+    user = request.user
+
+    if user == profile_user:
+        return JsonResponse({"error": "Cannot follow yourself"}, status=400)
+
+    if user in profile_user.followers.all():
+        profile_user.followers.remove(user)
+        following = False
+    else:
+        profile_user.followers.add(user)
+        following = True
+
+    return JsonResponse({
+        "followers": profile_user.followers.count(),
+        "following": following
+    })
+
 def login_view(request):
     if request.method == "POST":
 
@@ -98,5 +118,5 @@ def register(request):
 def profile(request, username):
     user = User.objects.get(username=username)
     posts = Post.objects.filter(poster = user).order_by("-timestamp")
-
-    return render(request, "network/profile.html", {"profile_user": user, "posts": posts, "followers": user.followers.count(), "following": user.following.count()})
+    is_following = request.user in user.followers.all()
+    return render(request, "network/profile.html", {"profile_user": user, "posts": posts, "followers": user.followers.count(), "following": user.following.count(), "is_following": is_following})

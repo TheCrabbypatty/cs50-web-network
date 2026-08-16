@@ -44,3 +44,27 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     });
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const button = document.querySelector("#follow-btn");
+    if (!button) return;
+
+    button.onclick = () => {
+        const username = window.location.pathname.split("/").pop();
+
+        fetch(`/follow/${username}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            button.innerText = data.following ? "Unfollow" : "Follow";
+            document.querySelector("#followers-count").innerText = data.followers;
+        });
+    };
+});
+
+
