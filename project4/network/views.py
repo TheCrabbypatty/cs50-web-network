@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.core.paginator import Paginator
 import json
 
 
@@ -16,9 +17,13 @@ def index(request):
         Post.objects.create(poster=request.user, content=content)
         return redirect("index")
     posts = Post.objects.all().order_by("-timestamp")
+    paginator = Paginator(posts, 10) 
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/index.html", {
-            "posts": posts
-        })
+        "page_obj": page_obj
+    })
 
 @csrf_exempt
 def edit(request, post_id):
@@ -118,5 +123,25 @@ def register(request):
 def profile(request, username):
     user = User.objects.get(username=username)
     posts = Post.objects.filter(poster = user).order_by("-timestamp")
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     is_following = request.user in user.followers.all()
-    return render(request, "network/profile.html", {"profile_user": user, "posts": posts, "followers": user.followers.count(), "following": user.following.count(), "is_following": is_following})
+    return render(request, "network/profile.html", {
+        "profile_user": user,
+        "page_obj": page_obj,
+        "followers": user.followers.count(),
+        "following": user.following.count(),
+        "is_following": is_following
+    })
+
+def following_feed(request):
+    following_users = request.user.following.all()
+    posts = Post.objects.filter(poster__in=following_users).order_by("-timestamp")
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, "network/following.html", {
+        "page_obj": page_obj
+    })

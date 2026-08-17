@@ -8,7 +8,7 @@
 
         {% if user !=  profile_user %}
             {% if is_following %}
-                <button id="follow-btn" class="btn btn-danger">Unfollow</button>
+                <button id="follow-btn" class="btn btn-primary">Unfollow</button>
             {% else %}
                 <button id="follow-btn" class="btn btn-primary">Follow</button>
             {% endif %}
@@ -19,7 +19,7 @@
 
     <div class="mx-5">
         <h3>Posts</h3>
-        {% for post in posts %}
+        {% for post in page_obj %}
             <div class="card my-3">
                 <div class="card-body">
                     <p>{{ post.content }}</p>
@@ -28,5 +28,18 @@
             </div>
         {% endfor %}
     </div>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+
 
 {% endblock %}
